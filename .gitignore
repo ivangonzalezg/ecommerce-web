@@ -32,3 +32,9 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+yarn.lock
+package-lock.json
+.DS_Store
+npm-debug.log
+yarn-error.log
