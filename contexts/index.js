@@ -10,7 +10,12 @@ const initialState = {
     lastName: "",
     phone: "",
     photo: {
-      url: ""
+      url: "",
+      formats: {
+        thumbnail: {
+          url: ""
+        }
+      }
     }
   },
   jwt: "",
