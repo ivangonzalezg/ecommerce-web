@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:1337";
+const baseURL = process.env.NODE_ENV === "production" ? "http://3.141.85.165:1337" : "http://localhost:1337";
 
 const API = (jwt = "") =>
   axios.create({
