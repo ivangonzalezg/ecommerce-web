@@ -5,13 +5,17 @@
 .wrapper {
   display: flex;
   width: 100%;
-  height: calc(100vh - 81px);
+  height: 100vh;
   background-image: url(/images/background.png);
-  background-size: 100vw 100%;
+  background-size: cover;
+  background-position: center center;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-bottom: 80px;
+}
+
+.wrapper_sticky {
+  height: 100vh;
 }
 
 .title {
@@ -134,4 +138,5 @@
 .products {
   flex: 1;
   padding: 15px 30px 50px 30px;
+  height: 300vh;
 }

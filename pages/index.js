@@ -8,7 +8,7 @@ export default function Home(props) {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(router.query);
+    // console.log(router.query);
   }, [router.query]);
 
   const onSubmit = e => {

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useReducer } from "react";
+import { useContext, useEffect, useMemo, useReducer, useState } from "react";
 import cookies from "js-cookie";
 import { ToastProvider, useToasts } from "react-toast-notifications";
 import { USER, JWT, IS_LOGGED_IN, IS_LOADING, ERROR_MESSAGE, SUCCESS_MESSAGE } from "../constants";
@@ -42,6 +42,7 @@ function Root({ Component, pageProps, ...props }) {
   }
 
   const [state, dispatchState] = useReducer(stateReducer, initialState);
+  const [isSticky, setIsSticky] = useState(false);
 
   const getUserInfo = async jwt => {
     try {
@@ -79,9 +80,28 @@ function Root({ Component, pageProps, ...props }) {
     [state]
   );
 
+  useEffect(() => {
+    setIsSticky(false);
+    const query = document.querySelector("input[name='query']");
+    const offset = query?.offsetTop || 0;
+    if (pathname === "/") {
+      window.onscroll = () => {
+        if (window.pageYOffset >= offset + 48) {
+          setIsSticky(true);
+        } else {
+          setIsSticky(false);
+        }
+      };
+    } else {
+      window.onscroll = null;
+      setIsSticky(true);
+    }
+    return () => {};
+  }, [pathname]);
+
   return (
     <StateContext.Provider value={stateContext}>
-      <Header />
+      <Header isSticky={isSticky} />
       <Component {...pageProps} />
       <Toast errorMessage={state.errorMessage} successMessage={state.successMessage} />
     </StateContext.Provider>
