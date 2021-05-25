@@ -1,19 +1,39 @@
-import API, { getErrorMessage } from "../api";
-import styles from "../styles/home.module.css";
+import { useContext, useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
-import { useEffect } from "react";
+import Image from "next/image";
+import classNames from "classnames";
+import qs from "qs";
+import styles from "../styles/home.module.css";
+import API, { getErrorMessage, getPhotoUrl } from "../api";
+import { StateContext } from "../contexts";
 
 export default function Home(props) {
   const { categories } = props;
   const router = useRouter();
+  const { updateErrorMessage } = useContext(StateContext);
+  const [products, setProducts] = useState([]);
+
+  const getProducts = async category => {
+    try {
+      const query = qs.stringify({
+        "category.slug": category
+      });
+      const response = await API().get(`/products?${query}`);
+      setProducts(response.data);
+    } catch (error) {
+      updateErrorMessage(getErrorMessage(error));
+    }
+  };
 
   useEffect(() => {
-    // console.log(router.query);
+    getProducts(router.query?.category);
   }, [router.query]);
 
   const onSubmit = e => {
     e.preventDefault();
   };
+
+  const isCategorySelected = slug => (router.query?.category ? router.query?.category === slug : false);
 
   const goToCategory = category =>
     Router.replace(
@@ -41,15 +61,33 @@ export default function Home(props) {
         <div className={styles.categories}>
           <ul>
             {categories.map(category => (
-              <li key={category.id}>
-                <button className={styles.category} onClick={() => goToCategory(category)}>
-                  {category.name}
+              <li className={styles.category_container} key={category.id}>
+                <button
+                  className={classNames(styles.category, {
+                    [styles.category_active]: isCategorySelected(category.slug)
+                  })}
+                  onClick={() => goToCategory(category)}
+                >
+                  <Image
+                    className={styles.category_icon}
+                    loader={() => getPhotoUrl(category.icon.url)}
+                    src="/public/images/box.png"
+                    width={20}
+                    height={20}
+                  />
+                  <span className={styles.category_name}>{category.name}</span>
                 </button>
               </li>
             ))}
           </ul>
         </div>
-        <div className={styles.products}>prodcutos</div>
+        <div className={styles.products}>
+          {products.map(product => (
+            <div key={product.id}>
+              <span>Producto #{product.id}</span>
+            </div>
+          ))}
+        </div>
       </main>
     </div>
   );
