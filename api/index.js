@@ -16,9 +16,9 @@ function getErrorMessage(error = new Error("Error")) {
 
 function getPhotoUrl(url = "") {
   if (!url) {
-    return null;
+    return undefined;
   }
-  return `${baseURL}${url}`;
+  return () => `${baseURL}${url}`;
 }
 
 export default API;

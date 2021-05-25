@@ -35,7 +35,7 @@ export default function Header(props) {
           {isLoading ? null : isLoggedIn ? (
             <div className={styles.dropdown}>
               <Image
-                loader={user.photo ? () => getPhotoUrl(user.photo.formats.thumbnail.url) : undefined}
+                loader={getPhotoUrl(user.photo?.formats?.thumbnail?.url)}
                 src="/images/profile.png"
                 alt="profile photo"
                 width={38}

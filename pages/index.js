@@ -70,8 +70,8 @@ export default function Home(props) {
                 >
                   <Image
                     className={styles.category_icon}
-                    loader={() => getPhotoUrl(category.icon.url)}
-                    src="/public/images/box.png"
+                    loader={getPhotoUrl(category?.icon?.url)}
+                    src="/images/box.png"
                     width={20}
                     height={20}
                   />

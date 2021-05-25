@@ -147,6 +147,11 @@
   width: 100%;
 }
 
+.category_icon {
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
 .category:hover,
 .category_active {
   color: rgb(0, 158, 127);
