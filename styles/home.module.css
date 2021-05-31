@@ -166,9 +166,13 @@
 .category_name {
   margin-left: 10px;
 }
+.products_box {
+  min-height: calc(100vh - 81px);
+  padding: 15px 30px 50px;
+  flex: 1;
+}
 
 .products {
-  flex: 1;
-  padding: 15px 30px 50px 30px;
-  height: 300vh;
+  display: flex;
+  flex-wrap: wrap;
 }

@@ -6,6 +6,7 @@ import qs from "qs";
 import styles from "../styles/home.module.css";
 import API, { getErrorMessage, getPhotoUrl } from "../api";
 import { StateContext } from "../contexts";
+import Product from "../components/Product";
 
 export default function Home(props) {
   const { categories } = props;
@@ -81,12 +82,12 @@ export default function Home(props) {
             ))}
           </ul>
         </div>
-        <div className={styles.products}>
-          {products.map(product => (
-            <div key={product.id}>
-              <span>Producto #{product.id}</span>
-            </div>
-          ))}
+        <div className={styles.products_box}>
+          <div className={styles.products}>
+            {products.map(product => (
+              <Product key={product.id} {...product} />
+            ))}
+          </div>
         </div>
       </main>
     </div>

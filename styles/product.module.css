@@ -1,0 +1,90 @@
+.product {
+  padding: 0 10px;
+  margin-bottom: 25px;
+}
+
+.container {
+  background-color: white;
+  width: 250px;
+  border-radius: 10px;
+}
+
+.image_container {
+  padding: 5px;
+}
+
+.image {
+  object-fit: cover;
+  width: 100%;
+  margin: 5px;
+}
+
+.body_container {
+  padding: 20px 25px 30px;
+}
+
+.name {
+  font-size: 15px;
+  color: rgb(13, 17, 54);
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0px 0px 7px;
+}
+
+.pieces {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgb(119, 121, 140);
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  position: relative;
+}
+
+.price {
+  font-size: 15px;
+  font-weight: 700;
+  color: rgb(0, 158, 127);
+}
+
+.cart_button {
+  border: 2px solid rgb(247, 247, 247);
+  border-radius: 18px;
+  height: 36px;
+  padding-left: 17px;
+  padding-right: 17px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  appearance: none;
+  display: flex;
+  align-items: center;
+  color: rgb(0, 158, 127);
+  background-color: rgb(255, 255, 255);
+}
+
+.cart_button:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 158, 127);
+  border-color: rgb(0, 158, 127);
+}
+
+.cart_button span {
+  margin-left: 8px;
+}
+
+.cart {
+  filter: invert(35%) sepia(88%) saturate(766%) hue-rotate(129deg) brightness(105%) contrast(101%);
+}
+
+.cart_button:hover .cart {
+  filter: invert(100%) sepia(11%) saturate(7455%) hue-rotate(193deg) brightness(114%) contrast(111%);
+}

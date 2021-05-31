@@ -2,6 +2,7 @@
   position: absolute;
   width: 100%;
   background-color: rgb(255, 255, 255);
+  z-index: 1;
 }
 
 @keyframes fadeIn {
