@@ -19,9 +19,11 @@ export default function Modal(props) {
   useEffect(() => {
     if (isOpen) {
       document.addEventListener("keydown", keydownListener);
+      document.body.style.overflow = "hidden";
     }
     return () => {
       document.removeEventListener("keydown", keydownListener);
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
