@@ -5,14 +5,15 @@ import Link from "next/link";
 import API, { getErrorMessage } from "../api";
 import { StateContext } from "../contexts";
 import { JWT, LOGIN, REGISTER, FORGOT_PASSWORD } from "../constants";
-import styles from "../styles/modal.module.css";
+import styles from "../styles/components/auth.module.css";
 
 function ForgotPassword(props) {
   const { onRequestClose, changeView } = props;
   const { updateSuccessMessage, updateErrorMessage } = useContext(StateContext);
+  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const onForgotPassword = async email => {
+  const onForgotPassword = async () => {
     try {
       setIsLoading(true);
       await API().post("auth/forgot-password", {
@@ -29,7 +30,7 @@ function ForgotPassword(props) {
 
   const onSubmit = e => {
     e.preventDefault();
-    onForgotPassword(e.currentTarget.email.value);
+    onForgotPassword();
   };
 
   return (
@@ -38,7 +39,14 @@ function ForgotPassword(props) {
         <h3 className={styles.title}>Olvidé mi contraseña</h3>
         <span className={styles.subtitle}>Te enviaremos un enlace para restablecer su contraseña</span>
         <form className={styles.form} onSubmit={onSubmit}>
-          <input type="email" name="email" placeholder="Correo electrónico" required disabled={isLoading} />
+          <input
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            type="email"
+            placeholder="Correo electrónico"
+            required
+            disabled={isLoading}
+          />
           <button type="submit" disabled={isLoading}>
             Restablecer la contraseña
           </button>
@@ -57,9 +65,14 @@ function ForgotPassword(props) {
 function Register(props) {
   const { onRequestClose, changeView } = props;
   const { updateSuccessMessage, updateErrorMessage } = useContext(StateContext);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const onRegister = async (firstName, lastName, phone, email, password) => {
+  const onRegister = async () => {
     try {
       setIsLoading(true);
       const result = await API().post("auth/local/register", {
@@ -81,13 +94,7 @@ function Register(props) {
 
   const onSubmit = e => {
     e.preventDefault();
-    onRegister(
-      e.currentTarget.firstName.value,
-      e.currentTarget.lastName.value,
-      e.currentTarget.phone.value,
-      e.currentTarget.email.value,
-      e.currentTarget.password.value
-    );
+    onRegister();
   };
 
   return (
@@ -96,11 +103,46 @@ function Register(props) {
         <h3 className={styles.title}>Regístrate</h3>
         <span className={styles.subtitle}>Regístrate con tu correo electrónico y contraseña</span>
         <form className={styles.form} onSubmit={onSubmit}>
-          <input type="text" name="firstName" placeholder="Nombre(s)" required disabled={isLoading} />
-          <input type="text" name="lastName" placeholder="Apellido(s)" required disabled={isLoading} />
-          <input type="number" name="phone" placeholder="Número de teléfono" required disabled={isLoading} />
-          <input type="email" name="email" placeholder="Correo electrónico" required disabled={isLoading} />
-          <input type="password" name="password" placeholder="Contraseña" required disabled={isLoading} />
+          <input
+            value={firstName}
+            onChange={e => setFirstName(e.target.value)}
+            type="text"
+            placeholder="Nombre(s)"
+            required
+            disabled={isLoading}
+          />
+          <input
+            value={lastName}
+            onChange={e => setLastName(e.target.value)}
+            type="text"
+            placeholder="Apellido(s)"
+            required
+            disabled={isLoading}
+          />
+          <input
+            value={phone}
+            onChange={e => setPhone(e.target.value)}
+            type="number"
+            placeholder="Número de teléfono"
+            required
+            disabled={isLoading}
+          />
+          <input
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            type="email"
+            placeholder="Correo electrónico"
+            required
+            disabled={isLoading}
+          />
+          <input
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            type="password"
+            placeholder="Contraseña"
+            required
+            disabled={isLoading}
+          />
           <p className={styles.terms_and_conditions}>
             Al registrarte, acepta los{" "}
             <Link href="/terms-and-conditions">
@@ -122,9 +164,11 @@ function Register(props) {
 function Login(props) {
   const { onRequestClose, changeView } = props;
   const { updateJwt, updateUser, updateIsLoggedIn, updateErrorMessage } = useContext(StateContext);
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const onLogin = async (identifier, password) => {
+  const onLogin = async () => {
     try {
       setIsLoading(true);
       const result = await API().post("auth/local", {
@@ -146,7 +190,7 @@ function Login(props) {
 
   const onSubmit = e => {
     e.preventDefault();
-    onLogin(e.currentTarget.email.value, e.currentTarget.password.value);
+    onLogin();
   };
 
   return (
@@ -155,8 +199,22 @@ function Login(props) {
         <h3 className={styles.title}>Bienvenido de nuevo</h3>
         <span className={styles.subtitle}>Inicia sesión con tu correo electrónico y contraseña</span>
         <form className={styles.form} onSubmit={onSubmit}>
-          <input type="email" name="email" placeholder="Correo electrónico" required disabled={isLoading} />
-          <input type="password" name="password" placeholder="Contraseña" required disabled={isLoading} />
+          <input
+            value={identifier}
+            onChange={e => setIdentifier(e.target.value)}
+            type="email"
+            placeholder="Correo electrónico"
+            required
+            disabled={isLoading}
+          />
+          <input
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            type="password"
+            placeholder="Contraseña"
+            required
+            disabled={isLoading}
+          />
           <button type="submit" disabled={isLoading}>
             Continuar
           </button>

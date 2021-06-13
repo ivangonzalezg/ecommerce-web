@@ -57,7 +57,7 @@
   box-shadow: rgba(0, 0, 0, 0.05) 0px 21px 36px;
 }
 
-.query {
+.name {
   flex-grow: 1;
   font-size: 15px;
   padding-right: 20px;
@@ -71,7 +71,7 @@
   padding-left: 20px;
 }
 
-.query:focus {
+.name:focus {
   outline: 0px;
 }
 

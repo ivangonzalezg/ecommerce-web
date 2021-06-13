@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import Image from "next/image";
 import Link from "next/link";
 import classNames from "classnames";
-import Modal from "../components/Modal";
+import Auth from "../components/Auth";
 import { StateContext } from "../contexts";
-import styles from "../styles/header.module.css";
+import styles from "../styles/components/header.module.css";
 import { getPhotoUrl } from "../api";
 
 export default function Header(props) {
@@ -60,7 +60,7 @@ export default function Header(props) {
             </button>
           )}
         </div>
-        <Modal isOpen={isModal} onRequestClose={() => setIsModal(false)} />
+        <Auth isOpen={isModal} onRequestClose={() => setIsModal(false)} />
       </div>
     </header>
   );

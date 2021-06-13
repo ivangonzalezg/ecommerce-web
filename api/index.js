@@ -18,7 +18,12 @@ function getPhotoUrl(url = "") {
   if (!url) {
     return undefined;
   }
-  return () => `${baseURL}${url}`;
+  try {
+    new URL(url);
+    return () => url;
+  } catch (error) {
+    return () => `${baseURL}${url}`;
+  }
 }
 
 export default API;

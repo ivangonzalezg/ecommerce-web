@@ -1,12 +1,14 @@
 .product {
   padding: 0 10px;
   margin-bottom: 25px;
+  position: relative;
 }
 
 .container {
   background-color: white;
   width: 250px;
   border-radius: 10px;
+  position: relative;
 }
 
 .image_container {
@@ -54,6 +56,27 @@
   color: rgb(0, 158, 127);
 }
 
+.price_discount {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgb(255, 179, 105);
+  font-style: italic;
+  position: absolute;
+  top: -10px;
+  padding: 0 5px;
+}
+
+.price_discount::before {
+  content: "";
+  width: 100%;
+  height: 1px;
+  display: inline-block;
+  background-color: rgb(255, 179, 105);
+  position: absolute;
+  top: 50%;
+  left: 0px;
+}
+
 .cart_button {
   border: 2px solid rgb(247, 247, 247);
   border-radius: 18px;
@@ -87,4 +110,18 @@
 
 .cart_button:hover .cart {
   filter: invert(100%) sepia(11%) saturate(7455%) hue-rotate(193deg) brightness(114%) contrast(111%);
+}
+
+.discount {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgb(255, 255, 255);
+  line-height: 24px;
+  background-color: rgb(255, 173, 94);
+  padding-left: 10px;
+  padding-right: 10px;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  border-radius: 12px;
 }
