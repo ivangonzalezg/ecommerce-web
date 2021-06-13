@@ -47,6 +47,10 @@
   font-weight: 700;
 }
 
+.link_active {
+  color: rgb(0, 158, 127);
+}
+
 .button {
   box-sizing: border-box;
   padding: 0px 15px;

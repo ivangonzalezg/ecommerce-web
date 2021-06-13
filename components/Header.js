@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import classNames from "classnames";
 import Auth from "../components/Auth";
 import { StateContext } from "../contexts";
@@ -11,7 +12,8 @@ import { getPhotoUrl } from "../api";
 export default function Header(props) {
   const { isSticky } = props;
   const { user, isLoading, isLoggedIn, updateIsLoggedIn } = useContext(StateContext);
-  const [isModal, setIsModal] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
+  const router = useRouter();
 
   return (
     <header
@@ -27,10 +29,10 @@ export default function Header(props) {
         </Link>
         <div className={styles.wrapper}>
           <Link href="/offers">
-            <a className={styles.link}>Ofertas</a>
+            <a className={classNames(styles.link, { [styles.link_active]: router.pathname === "/offers" })}>Ofertas</a>
           </Link>
           <Link href="/help">
-            <a className={styles.link}>¿Necesitas ayuda?</a>
+            <a className={classNames(styles.link, { [styles.link_active]: router.pathname === "/help" })}>¿Necesitas ayuda?</a>
           </Link>
           {isLoading ? null : isLoggedIn ? (
             <div className={styles.dropdown}>
@@ -55,12 +57,12 @@ export default function Header(props) {
               </div>
             </div>
           ) : (
-            <button className={styles.button} onClick={() => setIsModal(true)}>
+            <button className={styles.button} onClick={() => setIsAuth(true)}>
               Unirse
             </button>
           )}
         </div>
-        <Auth isOpen={isModal} onRequestClose={() => setIsModal(false)} />
+        <Auth isOpen={isAuth} onRequestClose={() => setIsAuth(false)} />
       </div>
     </header>
   );
