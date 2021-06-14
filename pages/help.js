@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import API, { getErrorMessage } from "../api";
 import styles from "../styles/help.module.css";
 import Faq from "../components/Faq";
 
 export default function Help(props) {
   const { faqs } = props;
+  const [openId, setOpenId] = useState("");
+
   return (
     <div className={styles.container}>
       <div className={styles.wrapper}>
         <h3 className={styles.title}>F.A.Q</h3>
         {faqs.map(faq => (
-          <Faq key={faq.id} {...faq} />
+          <Faq key={faq.id} {...faq} isOpen={openId === faq.id} updateIsOpen={setOpenId} />
         ))}
       </div>
     </div>

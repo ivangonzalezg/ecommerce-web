@@ -27,7 +27,7 @@
 }
 
 .description {
-  transition: height 0.25s ease;
+  transition: height 0.3s ease;
   height: 0;
 }
 
@@ -38,8 +38,4 @@
   font-weight: 400;
   color: rgb(119, 121, 140);
   line-height: 1.75;
-}
-
-.description_open {
-  height: auto;
 }
