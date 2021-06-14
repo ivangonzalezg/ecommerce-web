@@ -1,0 +1,21 @@
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  padding: 30px;
+}
+
+.wrapper {
+  width: 840px;
+}
+
+.title {
+  font-size: 21px;
+  font-weight: 700;
+  color: rgb(13, 17, 54);
+  line-height: 1.2;
+  margin-bottom: 25px;
+  width: 100%;
+  text-align: center;
+}

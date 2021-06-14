@@ -4,6 +4,7 @@ import { ToastProvider, useToasts } from "react-toast-notifications";
 import { USER, JWT, IS_LOGGED_IN, IS_LOADING, ERROR_MESSAGE, SUCCESS_MESSAGE } from "../constants";
 import { initialState, StateContext, stateReducer } from "../contexts";
 import Header from "../components/Header";
+import Spacer from "../components/Spacer";
 import API, { getErrorMessage } from "../api";
 import "../styles/globals.css";
 
@@ -82,7 +83,7 @@ function Root({ Component, pageProps, ...props }) {
 
   useEffect(() => {
     setIsSticky(false);
-    const query = document.querySelector("input[name='query']");
+    const query = document.querySelector("form input[class*='name']");
     const offset = query?.offsetTop || 0;
     if (pathname === "/") {
       window.onscroll = () => {
@@ -102,6 +103,7 @@ function Root({ Component, pageProps, ...props }) {
   return (
     <StateContext.Provider value={stateContext}>
       <Header isSticky={isSticky} />
+      <Spacer pathname={pathname} isSticky={isSticky} />
       <Component {...pageProps} />
       <Toast errorMessage={state.errorMessage} successMessage={state.successMessage} />
     </StateContext.Provider>
