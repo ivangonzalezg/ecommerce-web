@@ -24,7 +24,7 @@ export const getServerSideProps = async () => {
   let faqs = [];
 
   try {
-    const response = await API().get("/faqs");
+    const response = await API("", true).get("/faqs");
     faqs = response.data;
   } catch (error) {
     console.log(getErrorMessage(error));

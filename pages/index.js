@@ -111,7 +111,7 @@ export const getServerSideProps = async () => {
   let categories = [];
 
   try {
-    const response = await API().get("/categories");
+    const response = await API("", true).get("/categories");
     categories = response.data;
   } catch (error) {
     console.log(getErrorMessage(error));

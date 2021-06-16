@@ -2,9 +2,9 @@ import axios from "axios";
 
 const baseURL = process.env.NODE_ENV === "production" ? "http://3.141.85.165:1337" : "http://localhost:1337";
 
-const API = (jwt = "") =>
+const API = (jwt = "", isLocal = false) =>
   axios.create({
-    baseURL,
+    baseURL: isLocal ? "http://localhost:1337" : baseURL,
     headers: jwt ? { Authorization: `Bearer ${jwt}` } : {}
   });
 
