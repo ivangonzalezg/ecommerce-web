@@ -120,7 +120,7 @@ export default function App(props) {
 }
 
 Root.propTypes = {
-  Component: PropTypes.node.isRequired,
+  Component: PropTypes.any.isRequired,
   pageProps: PropTypes.any.isRequired,
   router: PropTypes.any.isRequired
 };

@@ -1,0 +1,45 @@
+.container:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.wrapper {
+  background-color: unset;
+  border: 0px;
+  outline: 0px;
+  margin: 0px;
+  font-family: Lato, sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-weight: 500;
+  color: rgb(13, 17, 54);
+  cursor: pointer;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  padding: 10px 0px;
+  width: 100%;
+}
+
+.icon {
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.wrapper:hover,
+.active {
+  color: rgb(0, 158, 127);
+}
+
+.wrapper:hover .icon,
+.active .icon {
+  -webkit-filter: invert(39%) sepia(95%) saturate(697%) hue-rotate(128deg) brightness(94%) contrast(101%);
+  filter: invert(39%) sepia(95%) saturate(697%) hue-rotate(128deg) brightness(94%) contrast(101%);
+}
+
+.name {
+  margin-left: 10px;
+}

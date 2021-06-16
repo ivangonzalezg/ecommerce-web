@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Router, { useRouter } from "next/router";
-import Image from "next/image";
-import classNames from "classnames";
 import qs from "qs";
 import styles from "../styles/index.module.css";
-import API, { getErrorMessage, getPhotoUrl } from "../api";
+import API, { getErrorMessage } from "../api";
 import { StateContext } from "../contexts";
+import Category from "../components/Category";
 import Product from "../components/Product";
 
 export default function Home(props) {
@@ -75,27 +74,16 @@ export default function Home(props) {
         <div className={styles.categories}>
           <ul>
             {categories.map(category => (
-              <li className={styles.category_container} key={category.id}>
-                <button
-                  className={classNames(styles.category, {
-                    [styles.category_active]: isCategorySelected(category.slug)
-                  })}
-                  onClick={() => goToCategory(category.slug)}
-                >
-                  <Image
-                    className={styles.category_icon}
-                    loader={getPhotoUrl(category?.icon?.url)}
-                    src="/images/box.png"
-                    width={20}
-                    height={20}
-                  />
-                  <span className={styles.category_name}>{category.name}</span>
-                </button>
-              </li>
+              <Category
+                key={category.id}
+                category={category}
+                isCategorySelected={isCategorySelected(category.slug)}
+                goToCategory={goToCategory}
+              />
             ))}
           </ul>
         </div>
-        <div className={styles.products_box}>
+        <div className={styles.products_container}>
           <div className={styles.products}>
             {products.map(product => (
               <Product key={product.id} {...product} />
