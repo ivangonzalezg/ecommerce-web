@@ -75,7 +75,7 @@ function Register(props) {
   const onRegister = async () => {
     try {
       setIsLoading(true);
-      const result = await API().post("auth/local/register", {
+      await API().post("auth/local/register", {
         firstName,
         lastName,
         phone,

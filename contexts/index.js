@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import cookies from "js-cookie";
 import { createContext } from "react";
 import { USER, JWT, IS_LOADING, IS_LOGGED_IN, ERROR_MESSAGE, SUCCESS_MESSAGE } from "../constants";

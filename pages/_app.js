@@ -1,4 +1,5 @@
-import { useContext, useEffect, useMemo, useReducer, useState } from "react";
+import React, { useContext, useEffect, useMemo, useReducer, useState } from "react";
+import PropTypes from "prop-types";
 import cookies from "js-cookie";
 import { ToastProvider, useToasts } from "react-toast-notifications";
 import { USER, JWT, IS_LOGGED_IN, IS_LOADING, ERROR_MESSAGE, SUCCESS_MESSAGE } from "../constants";
@@ -117,3 +118,9 @@ export default function App(props) {
     </ToastProvider>
   );
 }
+
+Root.propTypes = {
+  Component: PropTypes.node.isRequired,
+  pageProps: PropTypes.any.isRequired,
+  router: PropTypes.any.isRequired
+};

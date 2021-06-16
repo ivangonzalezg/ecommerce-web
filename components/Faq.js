@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import PropTypes from "prop-types";
 import { Add, Remove } from "@material-ui/icons";
 import styles from "../styles/components/faq.module.css";
 
@@ -20,3 +21,11 @@ export default function Faq(props) {
     </div>
   );
 }
+
+Faq.propTypes = {
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  updateIsOpen: PropTypes.func.isRequired
+};

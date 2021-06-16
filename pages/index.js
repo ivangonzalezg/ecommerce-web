@@ -1,4 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import Router, { useRouter } from "next/router";
 import Image from "next/image";
 import classNames from "classnames";
@@ -58,7 +59,7 @@ export default function Home(props) {
     <div className={styles.container}>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>Joyería de marca e importados</h2>
-        <p className={styles.subtitle}>"Your jewelry introduces you before you even speak"</p>
+        <p className={styles.subtitle}>&quot;Your jewelry introduces you before you even speak&quot;</p>
         <form className={styles.form} onSubmit={onSubmit}>
           <input
             className={styles.name}
@@ -121,4 +122,8 @@ export const getServerSideProps = async () => {
       categories
     }
   };
+};
+
+Home.propTypes = {
+  categories: PropTypes.array.isRequired
 };

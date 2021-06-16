@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import API, { getErrorMessage } from "../api";
 import styles from "../styles/help.module.css";
 import Faq from "../components/Faq";
@@ -34,4 +35,8 @@ export const getServerSideProps = async () => {
       faqs
     }
   };
+};
+
+Help.propTypes = {
+  faqs: PropTypes.array.isRequired
 };
