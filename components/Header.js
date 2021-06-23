@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import classNames from "classnames";
 import Auth from "../components/Auth";
 import { StateContext } from "../contexts/state";
@@ -16,6 +16,13 @@ export default function Header(props) {
   const { isLoading } = useContext(StatusContext);
   const [isAuth, setIsAuth] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (router.query?.login === "true") {
+      setIsAuth(true);
+      Router.replace("/");
+    }
+  }, []);
 
   return (
     <header
