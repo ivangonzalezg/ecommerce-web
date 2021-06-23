@@ -5,13 +5,15 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import classNames from "classnames";
 import Auth from "../components/Auth";
-import { StateContext } from "../contexts";
+import { StateContext } from "../contexts/state";
+import { StatusContext } from "../contexts/status";
 import styles from "../styles/components/header.module.css";
 import { getPhotoUrl } from "../api";
 
 export default function Header(props) {
   const { isSticky } = props;
-  const { user, isLoading, isLoggedIn, updateIsLoggedIn } = useContext(StateContext);
+  const { user, isLoggedIn, updateIsLoggedIn } = useContext(StateContext);
+  const { isLoading } = useContext(StatusContext);
   const [isAuth, setIsAuth] = useState(false);
   const router = useRouter();
 

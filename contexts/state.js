@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import cookies from "js-cookie";
 import { createContext } from "react";
-import { USER, JWT, IS_LOADING, IS_LOGGED_IN, ERROR_MESSAGE, SUCCESS_MESSAGE } from "../constants";
+import { USER, JWT, IS_LOGGED_IN } from "../constants";
 
 const initialState = {
   user: {
@@ -20,19 +20,13 @@ const initialState = {
     }
   },
   jwt: "",
-  isLoading: true,
-  isLoggedIn: false,
-  errorMessage: "",
-  successMessage: ""
+  isLoggedIn: false
 };
 
 const StateContext = createContext({
   updateUser: (user = {}) => {},
   updateJwt: (jwt = "") => {},
-  updateIsLoading: (isLoading = false) => {},
   updateIsLoggedIn: (isLoggedIn = false) => {},
-  updateErrorMessage: (errorMessage = "") => {},
-  updateSuccessMessage: (successMessage = "") => {},
   ...initialState
 });
 
@@ -48,11 +42,6 @@ const stateReducer = (prevState, action) => {
         ...prevState,
         jwt: action.jwt
       };
-    case IS_LOADING:
-      return {
-        ...prevState,
-        isLoading: action.isLoading
-      };
     case IS_LOGGED_IN:
       if (action.isLoggedIn) {
         return {
@@ -67,16 +56,6 @@ const stateReducer = (prevState, action) => {
           isLoading: false
         };
       }
-    case ERROR_MESSAGE:
-      return {
-        ...prevState,
-        errorMessage: action.errorMessage
-      };
-    case SUCCESS_MESSAGE:
-      return {
-        ...prevState,
-        successMessage: action.successMessage
-      };
     default:
       return prevState;
   }

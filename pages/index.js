@@ -4,14 +4,14 @@ import Router, { useRouter } from "next/router";
 import qs from "qs";
 import styles from "../styles/index.module.css";
 import API, { getErrorMessage } from "../api";
-import { StateContext } from "../contexts";
+import { StatusContext } from "../contexts/status";
 import Category from "../components/Category";
 import Product from "../components/Product";
 
 export default function Home(props) {
   const { categories } = props;
   const router = useRouter();
-  const { updateErrorMessage } = useContext(StateContext);
+  const { updateErrorMessage } = useContext(StatusContext);
   const [name, setName] = useState(router.query?.name || "");
   const [products, setProducts] = useState([]);
 

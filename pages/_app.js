@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import cookies from "js-cookie";
 import { ToastProvider, useToasts } from "react-toast-notifications";
 import { USER, JWT, IS_LOGGED_IN, IS_LOADING, ERROR_MESSAGE, SUCCESS_MESSAGE } from "../constants";
-import { initialState, StateContext, stateReducer } from "../contexts";
+import { initialState, StateContext, stateReducer } from "../contexts/state";
+import { initialStatus, StatusContext, statusReducer } from "../contexts/status";
 import Header from "../components/Header";
 import Spacer from "../components/Spacer";
 import API, { getErrorMessage } from "../api";
@@ -11,7 +12,7 @@ import "../styles/globals.css";
 
 function Toast(props) {
   const { addToast } = useToasts();
-  const { updateErrorMessage, updateSuccessMessage } = useContext(StateContext);
+  const { updateErrorMessage, updateSuccessMessage } = useContext(StatusContext);
 
   useEffect(() => {
     if (props.errorMessage) {
@@ -43,44 +44,9 @@ function Root({ Component, pageProps, ...props }) {
     return <Component {...pageProps} />;
   }
 
-  const [state, dispatchState] = useReducer(stateReducer, initialState);
+  const { updateUser, updateJwt, updateIsLoggedIn } = useContext(StateContext);
+  const { updateIsLoading, updateErrorMessage, errorMessage, successMessage } = useContext(StatusContext);
   const [isSticky, setIsSticky] = useState(false);
-
-  const getUserInfo = async jwt => {
-    try {
-      const response = await API(jwt).get("users/me");
-      const user = response.data;
-      dispatchState({ type: USER, user });
-      dispatchState({ type: JWT, jwt });
-      dispatchState({ type: IS_LOGGED_IN, isLoggedIn: true });
-    } catch (error) {
-      cookies.remove(JWT);
-      dispatchState({ type: ERROR_MESSAGE, errorMessage: getErrorMessage(error) });
-    }
-    dispatchState({ type: IS_LOADING, isLoading: false });
-  };
-
-  useEffect(() => {
-    const jwt = cookies.get(JWT);
-    if (jwt) {
-      getUserInfo(jwt);
-    } else {
-      dispatchState({ type: IS_LOADING, isLoading: false });
-    }
-  }, []);
-
-  const stateContext = useMemo(
-    () => ({
-      updateUser: user => dispatchState({ type: USER, user }),
-      updateJwt: jwt => dispatchState({ type: JWT, jwt }),
-      updateIsLoading: isLoading => dispatchState({ type: IS_LOADING, isLoading }),
-      updateIsLoggedIn: isLoggedIn => dispatchState({ type: IS_LOGGED_IN, isLoggedIn }),
-      updateErrorMessage: errorMessage => dispatchState({ type: ERROR_MESSAGE, errorMessage }),
-      updateSuccessMessage: successMessage => dispatchState({ type: SUCCESS_MESSAGE, successMessage }),
-      ...state
-    }),
-    [state]
-  );
 
   useEffect(() => {
     setIsSticky(false);
@@ -101,21 +67,70 @@ function Root({ Component, pageProps, ...props }) {
     return () => {};
   }, [pathname]);
 
+  const getUserInfo = async jwt => {
+    try {
+      const response = await API(jwt).get("users/me");
+      const user = response.data;
+      updateUser(user);
+      updateJwt(jwt);
+      updateIsLoggedIn(true);
+    } catch (error) {
+      cookies.remove(JWT);
+      updateErrorMessage(getErrorMessage(error));
+    }
+    updateIsLoading(false);
+  };
+
+  useEffect(() => {
+    const jwt = cookies.get(JWT);
+    if (jwt) {
+      getUserInfo(jwt);
+    } else {
+      updateIsLoading(false);
+    }
+  }, []);
+
   return (
-    <StateContext.Provider value={stateContext}>
+    <>
       <Header isSticky={isSticky} />
       <Spacer pathname={pathname} isSticky={isSticky} />
       <Component {...pageProps} />
-      <Toast errorMessage={state.errorMessage} successMessage={state.successMessage} />
-    </StateContext.Provider>
+      <Toast errorMessage={errorMessage} successMessage={successMessage} />
+    </>
   );
 }
 
 export default function App(props) {
+  const [state, dispatchState] = useReducer(stateReducer, initialState);
+  const [status, dispatchStatus] = useReducer(statusReducer, initialStatus);
+
+  const stateContext = useMemo(
+    () => ({
+      updateUser: user => dispatchState({ type: USER, user }),
+      updateJwt: jwt => dispatchState({ type: JWT, jwt }),
+      updateIsLoggedIn: isLoggedIn => dispatchState({ type: IS_LOGGED_IN, isLoggedIn }),
+      ...state
+    }),
+    [state]
+  );
+
+  const statusContext = useMemo(
+    () => ({
+      updateIsLoading: isLoading => dispatchStatus({ type: IS_LOADING, isLoading }),
+      updateErrorMessage: errorMessage => dispatchStatus({ type: ERROR_MESSAGE, errorMessage }),
+      updateSuccessMessage: successMessage => dispatchStatus({ type: SUCCESS_MESSAGE, successMessage }),
+      ...status
+    }),
+    [status]
+  );
   return (
-    <ToastProvider autoDismiss>
-      <Root {...props} />
-    </ToastProvider>
+    <StatusContext.Provider value={statusContext}>
+      <StateContext.Provider value={stateContext}>
+        <ToastProvider autoDismiss>
+          <Root {...props} />
+        </ToastProvider>
+      </StateContext.Provider>
+    </StatusContext.Provider>
   );
 }
 

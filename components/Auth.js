@@ -3,13 +3,14 @@ import PropTypes from "prop-types";
 import cookies from "js-cookie";
 import Link from "next/link";
 import API, { getErrorMessage } from "../api";
-import { StateContext } from "../contexts";
+import { StateContext } from "../contexts/state";
+import { StatusContext } from "../contexts/status";
 import { JWT, LOGIN, REGISTER, FORGOT_PASSWORD } from "../constants";
 import styles from "../styles/components/auth.module.css";
 
 function ForgotPassword(props) {
   const { onRequestClose, changeView } = props;
-  const { updateSuccessMessage, updateErrorMessage } = useContext(StateContext);
+  const { updateSuccessMessage, updateErrorMessage } = useContext(StatusContext);
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -64,7 +65,7 @@ function ForgotPassword(props) {
 
 function Register(props) {
   const { onRequestClose, changeView } = props;
-  const { updateSuccessMessage, updateErrorMessage } = useContext(StateContext);
+  const { updateSuccessMessage, updateErrorMessage } = useContext(StatusContext);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
@@ -163,7 +164,8 @@ function Register(props) {
 
 function Login(props) {
   const { onRequestClose, changeView } = props;
-  const { updateJwt, updateUser, updateIsLoggedIn, updateErrorMessage } = useContext(StateContext);
+  const { updateJwt, updateUser, updateIsLoggedIn } = useContext(StateContext);
+  const { updateErrorMessage } = useContext(StatusContext);
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
