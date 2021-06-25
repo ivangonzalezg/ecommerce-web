@@ -31,7 +31,7 @@ export default function Home(props) {
 
   useEffect(() => {
     getProducts();
-  }, [router.query]);
+  }, [router.query.category]);
 
   const updateQuery = query =>
     Router.replace(

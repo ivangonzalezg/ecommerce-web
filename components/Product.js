@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
+import Router, { useRouter } from "next/router";
 import styles from "../styles/components/product.module.css";
-import { getPhotoUrl } from "../api";
+import { getErrorMessage, getPhotoUrl } from "../api";
+import { StateContext } from "../contexts/state";
+import { StatusContext } from "../contexts/status";
 
 export default function Product(props) {
   const { image, name, quantity, price, discount } = props;
+  const { isLoggedIn } = useContext(StateContext);
+  const { updateErrorMessage } = useContext(StatusContext);
+  const router = useRouter();
+
+  const addToCart = async () => {
+    try {
+      if (!isLoggedIn) {
+        Router.replace({ query: { ...router.query, login: true } }, null, { shallow: true });
+        return;
+      }
+      // TODO: Add item to user cart
+    } catch (error) {
+      updateErrorMessage(getErrorMessage(error));
+    }
+  };
 
   let salePrice = price;
 
@@ -31,7 +49,7 @@ export default function Product(props) {
           <div className={styles.footer}>
             {discount > 0 && <span className={styles.price_discount}>${price}</span>}
             <span className={styles.price}>${salePrice}</span>
-            <button className={styles.cart_button}>
+            <button onClick={addToCart} className={styles.cart_button}>
               <Image className={styles.cart} src="/images/cart.png" width={12} height={12} />
               <span>Carrito</span>
             </button>

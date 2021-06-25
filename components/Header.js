@@ -18,11 +18,15 @@ export default function Header(props) {
   const router = useRouter();
 
   useEffect(() => {
-    if (router.query?.login === "true") {
-      setIsAuth(true);
-      Router.replace("/");
+    if (!isLoading) {
+      const query = router.query;
+      if (query?.login === "true" && !isLoggedIn) {
+        setIsAuth(true);
+        delete query.login;
+        Router.replace({ query }, null, { shallow: true });
+      }
     }
-  }, []);
+  }, [isLoading, router.query]);
 
   return (
     <header
@@ -71,6 +75,7 @@ export default function Header(props) {
             </button>
           )}
         </div>
+        {/* TODO: Move Auth component to _app.js and create a variable in status context to open it to avoid using query strings */}
         <Auth isOpen={isAuth} onRequestClose={() => setIsAuth(false)} />
       </div>
     </header>
