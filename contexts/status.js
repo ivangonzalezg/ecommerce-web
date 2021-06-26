@@ -1,17 +1,19 @@
 /* eslint-disable no-unused-vars */
 import { createContext } from "react";
-import { IS_LOADING, ERROR_MESSAGE, SUCCESS_MESSAGE } from "../constants";
+import { IS_LOADING, ERROR_MESSAGE, SUCCESS_MESSAGE, IS_AUTH } from "../constants";
 
 const initialStatus = {
   isLoading: true,
   errorMessage: "",
-  successMessage: ""
+  successMessage: "",
+  isAuth: false
 };
 
 const StatusContext = createContext({
   updateIsLoading: (isLoading = false) => {},
   updateErrorMessage: (errorMessage = "") => {},
   updateSuccessMessage: (successMessage = "") => {},
+  updateIsAuth: (isAuth = false) => {},
   ...initialStatus
 });
 
@@ -31,6 +33,11 @@ const statusReducer = (prevStatus, action) => {
       return {
         ...prevStatus,
         successMessage: action.successMessage
+      };
+    case IS_AUTH:
+      return {
+        ...prevStatus,
+        isAuth: action.isAuth
       };
     default:
       return prevStatus;

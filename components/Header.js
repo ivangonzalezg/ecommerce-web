@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
 import Link from "next/link";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import classNames from "classnames";
-import Auth from "../components/Auth";
 import { StateContext } from "../contexts/state";
 import { StatusContext } from "../contexts/status";
 import styles from "../styles/components/header.module.css";
@@ -13,20 +12,8 @@ import { getPhotoUrl } from "../api";
 export default function Header(props) {
   const { isSticky } = props;
   const { user, isLoggedIn, updateIsLoggedIn } = useContext(StateContext);
-  const { isLoading } = useContext(StatusContext);
-  const [isAuth, setIsAuth] = useState(false);
+  const { isLoading, updateIsAuth } = useContext(StatusContext);
   const router = useRouter();
-
-  useEffect(() => {
-    if (!isLoading) {
-      const query = router.query;
-      if (query?.login === "true" && !isLoggedIn) {
-        setIsAuth(true);
-        delete query.login;
-        Router.replace({ query }, null, { shallow: true });
-      }
-    }
-  }, [isLoading, router.query]);
 
   return (
     <header
@@ -70,13 +57,11 @@ export default function Header(props) {
               </div>
             </div>
           ) : (
-            <button className={styles.button} onClick={() => setIsAuth(true)}>
+            <button className={styles.button} onClick={() => updateIsAuth(true)}>
               Unirse
             </button>
           )}
         </div>
-        {/* TODO: Move Auth component to _app.js and create a variable in status context to open it to avoid using query strings */}
-        <Auth isOpen={isAuth} onRequestClose={() => setIsAuth(false)} />
       </div>
     </header>
   );

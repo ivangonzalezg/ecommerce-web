@@ -13,7 +13,6 @@
   cursor: pointer;
   outline: 0px;
   position: relative;
-  -webkit-box-pack: justify;
   justify-content: space-between;
 }
 

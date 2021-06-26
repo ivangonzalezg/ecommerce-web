@@ -2,11 +2,13 @@ import React, { useContext, useEffect, useMemo, useReducer, useState } from "rea
 import PropTypes from "prop-types";
 import cookies from "js-cookie";
 import { ToastProvider, useToasts } from "react-toast-notifications";
-import { USER, JWT, IS_LOGGED_IN, IS_LOADING, ERROR_MESSAGE, SUCCESS_MESSAGE } from "../constants";
+import Router, { useRouter } from "next/router";
+import { USER, JWT, IS_LOGGED_IN, IS_LOADING, ERROR_MESSAGE, SUCCESS_MESSAGE, IS_AUTH } from "../constants";
 import { initialState, StateContext, stateReducer } from "../contexts/state";
 import { initialStatus, StatusContext, statusReducer } from "../contexts/status";
 import Header from "../components/Header";
 import Spacer from "../components/Spacer";
+import Auth from "../components/Auth";
 import API, { getErrorMessage } from "../api";
 import "../styles/globals.css";
 
@@ -44,9 +46,22 @@ function Root({ Component, pageProps, ...props }) {
     return <Component {...pageProps} />;
   }
 
-  const { updateUser, updateJwt, updateIsLoggedIn } = useContext(StateContext);
-  const { updateIsLoading, updateErrorMessage, errorMessage, successMessage } = useContext(StatusContext);
+  const { isLoggedIn, updateUser, updateJwt, updateIsLoggedIn } = useContext(StateContext);
+  const { isLoading, updateIsLoading, updateErrorMessage, errorMessage, successMessage, isAuth, updateIsAuth } =
+    useContext(StatusContext);
   const [isSticky, setIsSticky] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading) {
+      const query = router.query;
+      if (query?.login === "true" && !isLoggedIn) {
+        updateIsAuth(true);
+        delete query.login;
+        Router.replace({ query }, null, { shallow: true });
+      }
+    }
+  }, [isLoading, router.query]);
 
   useEffect(() => {
     setIsSticky(false);
@@ -95,6 +110,7 @@ function Root({ Component, pageProps, ...props }) {
       <Header isSticky={isSticky} />
       <Spacer pathname={pathname} isSticky={isSticky} />
       <Component {...pageProps} />
+      <Auth isOpen={isAuth} onRequestClose={() => updateIsAuth(false)} />
       <Toast errorMessage={errorMessage} successMessage={successMessage} />
     </>
   );
@@ -119,6 +135,7 @@ export default function App(props) {
       updateIsLoading: isLoading => dispatchStatus({ type: IS_LOADING, isLoading }),
       updateErrorMessage: errorMessage => dispatchStatus({ type: ERROR_MESSAGE, errorMessage }),
       updateSuccessMessage: successMessage => dispatchStatus({ type: SUCCESS_MESSAGE, successMessage }),
+      updateIsAuth: isAuth => dispatchStatus({ type: IS_AUTH, isAuth }),
       ...status
     }),
     [status]

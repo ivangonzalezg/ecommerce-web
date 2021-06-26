@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
-import Router, { useRouter } from "next/router";
 import styles from "../styles/components/product.module.css";
 import { getErrorMessage, getPhotoUrl } from "../api";
 import { StateContext } from "../contexts/state";
@@ -10,13 +9,12 @@ import { StatusContext } from "../contexts/status";
 export default function Product(props) {
   const { image, name, quantity, price, discount } = props;
   const { isLoggedIn } = useContext(StateContext);
-  const { updateErrorMessage } = useContext(StatusContext);
-  const router = useRouter();
+  const { updateErrorMessage, updateIsAuth } = useContext(StatusContext);
 
   const addToCart = async () => {
     try {
       if (!isLoggedIn) {
-        Router.replace({ query: { ...router.query, login: true } }, null, { shallow: true });
+        updateIsAuth(true);
         return;
       }
       // TODO: Add item to user cart
