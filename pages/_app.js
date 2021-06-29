@@ -3,7 +3,17 @@ import PropTypes from "prop-types";
 import cookies from "js-cookie";
 import { ToastProvider, useToasts } from "react-toast-notifications";
 import Router, { useRouter } from "next/router";
-import { USER, JWT, IS_LOGGED_IN, IS_LOADING, ERROR_MESSAGE, SUCCESS_MESSAGE, IS_AUTH } from "../constants";
+import {
+  USER,
+  JWT,
+  IS_LOGGED_IN,
+  IS_LOADING,
+  ERROR_MESSAGE,
+  SUCCESS_MESSAGE,
+  INFO_MESSAGE,
+  WARNING_MESSAGE,
+  IS_AUTH
+} from "../constants";
 import { initialState, StateContext, stateReducer } from "../contexts/state";
 import { initialStatus, StatusContext, statusReducer } from "../contexts/status";
 import Header from "../components/Header";
@@ -12,27 +22,55 @@ import Auth from "../components/Auth";
 import API, { getErrorMessage } from "../api";
 import "../styles/globals.css";
 
-function Toast(props) {
+// TODO: Move this function to components folder
+function Toast() {
   const { addToast } = useToasts();
-  const { updateErrorMessage, updateSuccessMessage } = useContext(StatusContext);
+  const {
+    errorMessage,
+    successMessage,
+    infoMessage,
+    warningMessage,
+    updateErrorMessage,
+    updateSuccessMessage,
+    updateInfoMessage,
+    updateWarningMessage
+  } = useContext(StatusContext);
 
   useEffect(() => {
-    if (props.errorMessage) {
-      addToast(props.errorMessage, {
+    if (errorMessage) {
+      addToast(errorMessage, {
         appearance: "error"
       });
       updateErrorMessage("");
     }
-  }, [props.errorMessage]);
+  }, [errorMessage]);
 
   useEffect(() => {
-    if (props.successMessage) {
-      addToast(props.successMessage, {
+    if (successMessage) {
+      addToast(successMessage, {
         appearance: "success"
       });
       updateSuccessMessage("");
     }
-  }, [props.successMessage]);
+  }, [successMessage]);
+
+  useEffect(() => {
+    if (infoMessage) {
+      addToast(infoMessage, {
+        appearance: "info"
+      });
+      updateInfoMessage("");
+    }
+  }, [infoMessage]);
+
+  useEffect(() => {
+    if (warningMessage) {
+      addToast(warningMessage, {
+        appearance: "warning"
+      });
+      updateWarningMessage("");
+    }
+  }, [warningMessage]);
 
   return null;
 }
@@ -47,8 +85,7 @@ function Root({ Component, pageProps, ...props }) {
   }
 
   const { isLoggedIn, updateUser, updateJwt, updateIsLoggedIn } = useContext(StateContext);
-  const { isLoading, updateIsLoading, updateErrorMessage, errorMessage, successMessage, isAuth, updateIsAuth } =
-    useContext(StatusContext);
+  const { isLoading, isAuth, updateIsLoading, updateErrorMessage, updateIsAuth } = useContext(StatusContext);
   const [isSticky, setIsSticky] = useState(false);
   const router = useRouter();
 
@@ -111,7 +148,7 @@ function Root({ Component, pageProps, ...props }) {
       <Spacer pathname={pathname} isSticky={isSticky} />
       <Component {...pageProps} />
       <Auth isOpen={isAuth} onRequestClose={() => updateIsAuth(false)} />
-      <Toast errorMessage={errorMessage} successMessage={successMessage} />
+      <Toast />
     </>
   );
 }
@@ -135,6 +172,8 @@ export default function App(props) {
       updateIsLoading: isLoading => dispatchStatus({ type: IS_LOADING, isLoading }),
       updateErrorMessage: errorMessage => dispatchStatus({ type: ERROR_MESSAGE, errorMessage }),
       updateSuccessMessage: successMessage => dispatchStatus({ type: SUCCESS_MESSAGE, successMessage }),
+      updateInfoMessage: infoMessage => dispatchStatus({ type: INFO_MESSAGE, infoMessage }),
+      updateWarningMessage: warningMessage => dispatchStatus({ type: WARNING_MESSAGE, warningMessage }),
       updateIsAuth: isAuth => dispatchStatus({ type: IS_AUTH, isAuth }),
       ...status
     }),
