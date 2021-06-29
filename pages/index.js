@@ -31,19 +31,26 @@ export default function Home(props) {
 
   useEffect(() => {
     getProducts();
-  }, [router.query.category]);
+  }, [router.query.category, router.query.name]);
 
-  const updateQuery = query =>
+  const updateQuery = _query => {
+    const query = {
+      ...router.query,
+      ..._query
+    };
+    Object.keys(query).forEach(key => {
+      if (!query[key]) {
+        delete query[key];
+      }
+    });
     Router.replace(
       {
-        query: {
-          ...router.query,
-          ...query
-        }
+        query
       },
       null,
       { shallow: true }
     );
+  };
 
   const onSubmit = e => {
     e.preventDefault();
@@ -67,7 +74,9 @@ export default function Home(props) {
             type="text"
             placeholder="Busque sus productos desde aquí"
           />
-          <button className={styles.search}>Buscar</button>
+          <button className={styles.search} type="submit">
+            Buscar
+          </button>
         </form>
       </div>
       <main className={styles.main}>

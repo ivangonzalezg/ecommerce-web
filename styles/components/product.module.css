@@ -130,3 +130,37 @@
   right: 15px;
   border-radius: 12px;
 }
+
+.cart_button_cart {
+  background-color: rgb(0, 158, 127);
+  border: 2px solid rgb(247, 247, 247);
+  border-color: rgb(0, 158, 127);
+  border-radius: 18px;
+  color: rgb(255, 255, 255);
+  height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.cart_button_modify {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  background-color: unset;
+  color: white;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  height: 100%;
+}
+
+.cart_button_quantity {
+  margin: 0 10px;
+}
+
+.cart_button_disabled {
+  opacity: 0.5;
+  cursor: unset;
+}

@@ -1,15 +1,22 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
+import { Add, Remove } from "@material-ui/icons";
+import classNames from "classnames";
 import styles from "../styles/components/product.module.css";
-import { getErrorMessage, getPhotoUrl } from "../api";
+import API, { getErrorMessage, getPhotoUrl } from "../api";
 import { StateContext } from "../contexts/state";
 import { StatusContext } from "../contexts/status";
+import { CartContext } from "../contexts/cart";
 
 export default function Product(props) {
-  const { image, name, quantity, price, discount } = props;
-  const { isLoggedIn } = useContext(StateContext);
-  const { updateErrorMessage, updateIsAuth } = useContext(StatusContext);
+  const { id, image, name, quantity, price, discount } = props;
+  const { jwt, user, isLoggedIn } = useContext(StateContext);
+  const { updateErrorMessage, updateSuccessMessage, updateIsAuth, updateWarningMessage } = useContext(StatusContext);
+  const { items, updateItems } = useContext(CartContext);
+  const [disabled, setDisabled] = useState(false);
+
+  const productsInCart = items.filter(item => item.product.id === id).length;
 
   const addToCart = async () => {
     try {
@@ -17,8 +24,36 @@ export default function Product(props) {
         updateIsAuth(true);
         return;
       }
-      // TODO: Add item to user cart
+      if (Number(productsInCart) >= Number(quantity)) {
+        updateWarningMessage("No hay más existencias de este producto");
+        return;
+      }
+      setDisabled(true);
+      await API(jwt).post("/carts", {
+        product: id,
+        user: user.id
+      });
+      const response = await API(jwt).get("carts/me");
+      updateItems(response.data);
+      updateSuccessMessage("Producto añadido");
+      setDisabled(false);
     } catch (error) {
+      setDisabled(false);
+      updateErrorMessage(getErrorMessage(error));
+    }
+  };
+
+  const removeFromCart = async () => {
+    try {
+      setDisabled(true);
+      const cartId = items.filter(item => item.product.id === id)[0].id;
+      await API(jwt).delete(`carts/${cartId}`);
+      const response = await API(jwt).get("carts/me");
+      updateItems(response.data);
+      updateSuccessMessage("Producto removido");
+      setDisabled(false);
+    } catch (error) {
+      setDisabled(false);
       updateErrorMessage(getErrorMessage(error));
     }
   };
@@ -47,10 +82,44 @@ export default function Product(props) {
           <div className={styles.footer}>
             {discount > 0 && <span className={styles.price_discount}>${price}</span>}
             <span className={styles.price}>${salePrice}</span>
-            <button onClick={addToCart} className={styles.cart_button}>
-              <Image className={styles.cart} src="/images/cart.png" width={12} height={12} />
-              <span>Carrito</span>
-            </button>
+            {productsInCart > 0 ? (
+              <div
+                className={classNames(styles.cart_button_cart, {
+                  [styles.cart_button_disabled]: disabled
+                })}
+              >
+                <button
+                  className={classNames(styles.cart_button_modify, {
+                    [styles.cart_button_disabled]: disabled
+                  })}
+                  onClick={removeFromCart}
+                  disabled={disabled}
+                >
+                  <Remove fontSize="inherit" />
+                </button>
+                <span className={styles.cart_button_quantity}>{productsInCart}</span>
+                <button
+                  className={classNames(styles.cart_button_modify, {
+                    [styles.cart_button_disabled]: disabled
+                  })}
+                  onClick={addToCart}
+                  disabled={disabled}
+                >
+                  <Add fontSize="inherit" />
+                </button>
+              </div>
+            ) : (
+              <button
+                className={classNames(styles.cart_button, {
+                  [styles.cart_button_disabled]: disabled
+                })}
+                onClick={addToCart}
+                disabled={disabled}
+              >
+                <Image className={styles.cart} src="/images/cart.png" width={12} height={12} />
+                <span>Carrito</span>
+              </button>
+            )}
           </div>
         </div>
         {discount > 0 && <span className={styles.discount}>{discount}%</span>}
@@ -60,6 +129,7 @@ export default function Product(props) {
 }
 
 Product.propTypes = {
+  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
   quantity: PropTypes.string.isRequired,

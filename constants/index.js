@@ -10,7 +10,9 @@ const constants = {
   IS_AUTH: "is_auth",
   LOGIN: "login",
   REGISTER: "register",
-  FORGOT_PASSWORD: "forgot_password"
+  FORGOT_PASSWORD: "forgot_password",
+  CART_ITEMS: "items",
+  IS_CART_MODAL: "is_cart_modal"
 };
 
 module.exports = constants;

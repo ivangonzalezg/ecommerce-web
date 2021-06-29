@@ -12,10 +12,13 @@ import {
   SUCCESS_MESSAGE,
   INFO_MESSAGE,
   WARNING_MESSAGE,
-  IS_AUTH
+  IS_AUTH,
+  CART_ITEMS,
+  IS_CART_MODAL
 } from "../constants";
 import { initialState, StateContext, stateReducer } from "../contexts/state";
 import { initialStatus, StatusContext, statusReducer } from "../contexts/status";
+import { initialCart, CartContext, cartReducer } from "../contexts/cart";
 import Header from "../components/Header";
 import Spacer from "../components/Spacer";
 import Auth from "../components/Auth";
@@ -84,8 +87,9 @@ function Root({ Component, pageProps, ...props }) {
     return <Component {...pageProps} />;
   }
 
-  const { isLoggedIn, updateUser, updateJwt, updateIsLoggedIn } = useContext(StateContext);
+  const { isLoggedIn, jwt, updateUser, updateJwt, updateIsLoggedIn } = useContext(StateContext);
   const { isLoading, isAuth, updateIsLoading, updateErrorMessage, updateIsAuth } = useContext(StatusContext);
+  const { updateItems } = useContext(CartContext);
   const [isSticky, setIsSticky] = useState(false);
   const router = useRouter();
 
@@ -142,6 +146,23 @@ function Root({ Component, pageProps, ...props }) {
     }
   }, []);
 
+  const getUserCart = async () => {
+    try {
+      const response = await API(jwt).get("carts/me");
+      updateItems(response.data);
+    } catch (error) {
+      updateErrorMessage(getErrorMessage(error));
+    }
+  };
+
+  useEffect(() => {
+    if (jwt) {
+      getUserCart();
+    } else {
+      updateItems([]);
+    }
+  }, [jwt]);
+
   return (
     <>
       <Header isSticky={isSticky} />
@@ -156,6 +177,7 @@ function Root({ Component, pageProps, ...props }) {
 export default function App(props) {
   const [state, dispatchState] = useReducer(stateReducer, initialState);
   const [status, dispatchStatus] = useReducer(statusReducer, initialStatus);
+  const [cart, dispatchCart] = useReducer(cartReducer, initialCart);
 
   const stateContext = useMemo(
     () => ({
@@ -179,12 +201,24 @@ export default function App(props) {
     }),
     [status]
   );
+
+  const cartContext = useMemo(
+    () => ({
+      updateItems: items => dispatchCart({ type: CART_ITEMS, items }),
+      updateIsCartModal: isCartModal => dispatchCart({ type: IS_CART_MODAL, isCartModal }),
+      ...cart
+    }),
+    [cart]
+  );
+
   return (
     <StatusContext.Provider value={statusContext}>
       <StateContext.Provider value={stateContext}>
-        <ToastProvider autoDismiss>
-          <Root {...props} />
-        </ToastProvider>
+        <CartContext.Provider value={cartContext}>
+          <ToastProvider autoDismiss>
+            <Root {...props} />
+          </ToastProvider>
+        </CartContext.Provider>
       </StateContext.Provider>
     </StatusContext.Provider>
   );
