@@ -11,7 +11,7 @@ import { CartContext } from "../contexts/cart";
 
 export default function Product(props) {
   const { id, image, name, quantity, price, discount } = props;
-  const { jwt, user, isLoggedIn } = useContext(StateContext);
+  const { jwt, isLoggedIn } = useContext(StateContext);
   const { updateErrorMessage, updateSuccessMessage, updateIsAuth, updateWarningMessage } = useContext(StatusContext);
   const { items, updateItems } = useContext(CartContext);
   const [disabled, setDisabled] = useState(false);
@@ -29,11 +29,9 @@ export default function Product(props) {
         return;
       }
       setDisabled(true);
-      await API(jwt).post("/carts", {
-        product: id,
-        user: user.id
+      const response = await API(jwt).post("/carts/add", {
+        product: id
       });
-      const response = await API(jwt).get("carts/me");
       updateItems(response.data);
       updateSuccessMessage("Producto añadido");
       setDisabled(false);
@@ -46,9 +44,9 @@ export default function Product(props) {
   const removeFromCart = async () => {
     try {
       setDisabled(true);
-      const cartId = items.filter(item => item.product.id === id)[0].id;
-      await API(jwt).delete(`carts/${cartId}`);
-      const response = await API(jwt).get("carts/me");
+      const response = await API(jwt).post("carts/remove", {
+        product: id
+      });
       updateItems(response.data);
       updateSuccessMessage("Producto removido");
       setDisabled(false);
