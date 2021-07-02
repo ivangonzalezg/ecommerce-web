@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import cookies from "js-cookie";
 import { ToastProvider, useToasts } from "react-toast-notifications";
 import Router, { useRouter } from "next/router";
+import Head from "next/head";
 import {
   USER,
   JWT,
@@ -215,6 +216,14 @@ export default function App(props) {
     <StatusContext.Provider value={statusContext}>
       <StateContext.Provider value={stateContext}>
         <CartContext.Provider value={cartContext}>
+          <Head>
+            <meta charSet="UTF-8" />
+            <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>ANA LUCIA💎</title>
+            <meta name="description" content="Your jewelry introduces you before you even speak" />
+            <meta name="keywords" content="ecommerce, website, jewelry, joyas, instagram" />
+          </Head>
           <ToastProvider autoDismiss>
             <Root {...props} />
           </ToastProvider>
