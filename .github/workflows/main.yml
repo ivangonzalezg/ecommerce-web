@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Deploying API
+      - name: Deploying WEB
         uses: fifsky/ssh-action@master
         with:
           command: |
