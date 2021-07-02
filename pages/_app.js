@@ -223,6 +223,15 @@ export default function App(props) {
             <title>ANA LUCIA💎</title>
             <meta name="description" content="Your jewelry introduces you before you even speak" />
             <meta name="keywords" content="ecommerce, website, jewelry, joyas, instagram" />
+            <meta name="language" content="es" />
+            <meta name="author" content="Ivan Gonzalez, ivangonzalezgrc@gmail.com" />
+            <meta name="url" content="http://ecommerce-web.ddns.net/" />
+            <meta name="og:title" content="ANA LUCIA💎" />
+            <meta name="og:type" content="jewelry" />
+            <meta name="og:url" content="http://ecommerce-web.ddns.net/" />
+            <meta name="og:image" content="http://ecommerce-web.ddns.net/favicon.ico" />
+            <meta name="og:description" content="Your jewelry introduces you before you even speak" />
+            <meta name="og:country-name" content="MEX" />
           </Head>
           <ToastProvider autoDismiss>
             <Root {...props} />
