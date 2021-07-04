@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useReducer, useState } from "react";
 import PropTypes from "prop-types";
 import cookies from "js-cookie";
-import { ToastProvider, useToasts } from "react-toast-notifications";
+import { ToastProvider } from "react-toast-notifications";
 import Router, { useRouter } from "next/router";
 import Head from "next/head";
 import {
@@ -23,61 +23,9 @@ import { initialCart, CartContext, cartReducer } from "../contexts/cart";
 import Header from "../components/Header";
 import Spacer from "../components/Spacer";
 import Auth from "../components/Auth";
+import Toast from "../components/Toast";
 import API, { getErrorMessage } from "../api";
 import "../styles/globals.css";
-
-// TODO: Move this function to components folder
-function Toast() {
-  const { addToast } = useToasts();
-  const {
-    errorMessage,
-    successMessage,
-    infoMessage,
-    warningMessage,
-    updateErrorMessage,
-    updateSuccessMessage,
-    updateInfoMessage,
-    updateWarningMessage
-  } = useContext(StatusContext);
-
-  useEffect(() => {
-    if (errorMessage) {
-      addToast(errorMessage, {
-        appearance: "error"
-      });
-      updateErrorMessage("");
-    }
-  }, [errorMessage]);
-
-  useEffect(() => {
-    if (successMessage) {
-      addToast(successMessage, {
-        appearance: "success"
-      });
-      updateSuccessMessage("");
-    }
-  }, [successMessage]);
-
-  useEffect(() => {
-    if (infoMessage) {
-      addToast(infoMessage, {
-        appearance: "info"
-      });
-      updateInfoMessage("");
-    }
-  }, [infoMessage]);
-
-  useEffect(() => {
-    if (warningMessage) {
-      addToast(warningMessage, {
-        appearance: "warning"
-      });
-      updateWarningMessage("");
-    }
-  }, [warningMessage]);
-
-  return null;
-}
 
 function Root({ Component, pageProps, ...props }) {
   const {
