@@ -9,7 +9,9 @@ const API = (jwt = "", isLocal = false) =>
   });
 
 function getErrorMessage(error = new Error("Error")) {
-  return typeof error.response?.data?.message === "string"
+  return typeof error.response?.data === "string"
+    ? error.response?.data
+    : typeof error.response?.data?.message === "string"
     ? error.response?.data?.message
     : error.response?.data?.message[0]?.messages[0]?.message || error.message;
 }
