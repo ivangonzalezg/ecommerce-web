@@ -1,23 +1,21 @@
 /* eslint-disable no-unused-vars */
 import { createContext } from "react";
-import { CART_ITEMS, IS_CART_MODAL } from "../constants";
+import { CART_PRODUCTS, IS_ADDING, IS_CART_MODAL } from "../constants";
 
 const initialCart = {
-  items: [],
+  products: [],
   isCartModal: false
 };
 
 const cartTypes = {
-  items: [
+  products: [
     {
-      id: "",
+      quantity: 0,
       product: {
-        quantity: "",
         discount: 0,
         gallery: [
           {
-            url: "",
-            id: ""
+            url: ""
           }
         ],
         name: "",
@@ -25,33 +23,39 @@ const cartTypes = {
         slug: "anillo-compromiso-oro-rosa-18-k",
         price: "",
         image: {
-          url: "",
-          id: ""
+          url: ""
         },
         id: ""
       }
     }
   ],
-  isCartModal: false
+  isCartModal: false,
+  isAdding: false
 };
 
 const CartContext = createContext({
-  updateItems: (items = []) => {},
+  updateProducts: (products = []) => {},
   updateIsCartModal: (isCartModal = false) => {},
+  updateIsAdding: (isAdding = false) => {},
   ...cartTypes
 });
 
 const cartReducer = (prevCart, action) => {
   switch (action.type) {
-    case CART_ITEMS:
+    case CART_PRODUCTS:
       return {
         ...prevCart,
-        items: action.items
+        products: action.products
       };
     case IS_CART_MODAL:
       return {
         ...prevCart,
         isCartModal: action.isCartModal
+      };
+    case IS_ADDING:
+      return {
+        ...prevCart,
+        isAdding: action.isAdding
       };
     default:
       return prevCart;

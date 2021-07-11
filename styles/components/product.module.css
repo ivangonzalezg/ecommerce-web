@@ -160,7 +160,9 @@
   margin: 0 10px;
 }
 
-.cart_button_disabled {
+.cart_button_disabled,
+.cart_button:disabled,
+.cart_button_modify:disabled {
   opacity: 0.5;
-  cursor: unset;
+  cursor: default;
 }

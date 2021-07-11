@@ -11,8 +11,9 @@ const constants = {
   LOGIN: "login",
   REGISTER: "register",
   FORGOT_PASSWORD: "forgot_password",
-  CART_ITEMS: "items",
-  IS_CART_MODAL: "is_cart_modal"
+  CART_PRODUCTS: "cart_products",
+  IS_CART_MODAL: "is_cart_modal",
+  IS_ADDING: "is_adding"
 };
 
 module.exports = constants;

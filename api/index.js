@@ -13,7 +13,9 @@ function getErrorMessage(error = new Error("Error")) {
     ? error.response?.data
     : typeof error.response?.data?.message === "string"
     ? error.response?.data?.message
-    : error.response?.data?.message[0]?.messages[0]?.message || error.message;
+    : Array.isArray(error.response?.data?.message)
+    ? error.response?.data?.message[0]?.messages[0]?.message
+    : error.response?.data?.message.messages[0]?.message || error.message;
 }
 
 function getPhotoUrl(url = "") {

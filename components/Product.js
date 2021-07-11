@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
 import { Add, Remove } from "@material-ui/icons";
@@ -13,10 +13,9 @@ export default function Product(props) {
   const { id, image, name, quantity, price, discount } = props;
   const { jwt, isLoggedIn } = useContext(StateContext);
   const { updateErrorMessage, updateSuccessMessage, updateIsAuth, updateWarningMessage } = useContext(StatusContext);
-  const { items, updateItems } = useContext(CartContext);
-  const [disabled, setDisabled] = useState(false);
+  const { products, updateProducts, isAdding, updateIsAdding } = useContext(CartContext);
 
-  const productsInCart = items.filter(item => item.product.id === id).length;
+  const productInCart = products.find(item => item.product.id === id) || { quantity: 0 };
 
   const addToCart = async () => {
     try {
@@ -24,34 +23,34 @@ export default function Product(props) {
         updateIsAuth(true);
         return;
       }
-      if (Number(productsInCart) >= Number(quantity)) {
+      if (productInCart.quantity >= quantity) {
         updateWarningMessage("No hay más existencias de este producto");
         return;
       }
-      setDisabled(true);
+      updateIsAdding(true);
       const response = await API(jwt).post("/carts/add", {
         product: id
       });
-      updateItems(response.data);
+      updateProducts(response.data);
       updateSuccessMessage("Producto añadido");
-      setDisabled(false);
+      updateIsAdding(false);
     } catch (error) {
-      setDisabled(false);
+      updateIsAdding(false);
       updateErrorMessage(getErrorMessage(error));
     }
   };
 
   const removeFromCart = async () => {
     try {
-      setDisabled(true);
+      updateIsAdding(true);
       const response = await API(jwt).post("carts/remove", {
         product: id
       });
-      updateItems(response.data);
+      updateProducts(response.data);
       updateSuccessMessage("Producto removido");
-      setDisabled(false);
+      updateIsAdding(false);
     } catch (error) {
-      setDisabled(false);
+      updateIsAdding(false);
       updateErrorMessage(getErrorMessage(error));
     }
   };
@@ -80,40 +79,22 @@ export default function Product(props) {
           <div className={styles.footer}>
             {discount > 0 && <span className={styles.price_discount}>${price}</span>}
             <span className={styles.price}>${salePrice}</span>
-            {productsInCart > 0 ? (
+            {productInCart.quantity ? (
               <div
                 className={classNames(styles.cart_button_cart, {
-                  [styles.cart_button_disabled]: disabled
+                  [styles.cart_button_disabled]: isAdding
                 })}
               >
-                <button
-                  className={classNames(styles.cart_button_modify, {
-                    [styles.cart_button_disabled]: disabled
-                  })}
-                  onClick={removeFromCart}
-                  disabled={disabled}
-                >
+                <button className={classNames(styles.cart_button_modify)} onClick={removeFromCart} disabled={isAdding}>
                   <Remove fontSize="inherit" />
                 </button>
-                <span className={styles.cart_button_quantity}>{productsInCart}</span>
-                <button
-                  className={classNames(styles.cart_button_modify, {
-                    [styles.cart_button_disabled]: disabled
-                  })}
-                  onClick={addToCart}
-                  disabled={disabled}
-                >
+                <span className={styles.cart_button_quantity}>{productInCart.quantity}</span>
+                <button className={classNames(styles.cart_button_modify)} onClick={addToCart} disabled={isAdding}>
                   <Add fontSize="inherit" />
                 </button>
               </div>
             ) : (
-              <button
-                className={classNames(styles.cart_button, {
-                  [styles.cart_button_disabled]: disabled
-                })}
-                onClick={addToCart}
-                disabled={disabled}
-              >
+              <button className={classNames(styles.cart_button)} onClick={addToCart} disabled={isAdding}>
                 <Image className={styles.cart} src="/images/cart.png" width={12} height={12} />
                 <span>Carrito</span>
               </button>
@@ -129,8 +110,8 @@ export default function Product(props) {
 Product.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  price: PropTypes.string.isRequired,
-  quantity: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  quantity: PropTypes.number.isRequired,
   image: PropTypes.object.isRequired,
   discount: PropTypes.number.isRequired
 };
