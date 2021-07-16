@@ -86,11 +86,11 @@ export default function Product(props) {
                 })}
               >
                 <button className={classNames(styles.cart_button_modify)} onClick={removeFromCart} disabled={isAdding}>
-                  <Remove fontSize="inherit" />
+                  <Remove />
                 </button>
                 <span className={styles.cart_button_quantity}>{productInCart.quantity}</span>
                 <button className={classNames(styles.cart_button_modify)} onClick={addToCart} disabled={isAdding}>
-                  <Add fontSize="inherit" />
+                  <Add />
                 </button>
               </div>
             ) : (

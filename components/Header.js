@@ -7,7 +7,6 @@ import classNames from "classnames";
 import { StateContext } from "../contexts/state";
 import { StatusContext } from "../contexts/status";
 import styles from "../styles/components/header.module.css";
-import { getPhotoUrl } from "../api";
 
 export default function Header(props) {
   const { isSticky } = props;
@@ -37,8 +36,7 @@ export default function Header(props) {
           {isLoading ? null : isLoggedIn ? (
             <div className={styles.dropdown}>
               <Image
-                loader={getPhotoUrl(user.photo?.formats?.thumbnail?.url)}
-                src="/images/profile.png"
+                src={user.photo?.formats?.thumbnail?.url || "/images/profile.png"}
                 alt="profile photo"
                 width={38}
                 height={38}

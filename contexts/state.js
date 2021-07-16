@@ -11,6 +11,7 @@ const initialState = {
     lastName: "",
     phone: "",
     photo: {
+      id: "",
       url: "",
       formats: {
         thumbnail: {
