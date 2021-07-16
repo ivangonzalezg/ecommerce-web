@@ -33,6 +33,10 @@ export default function Profile() {
     }
   }, [jwt, isLoading]);
 
+  const isEditing =
+    JSON.stringify({ firstName, lastName, email, phone }) !==
+      JSON.stringify({ firstName: user.firstName, lastName: user.lastName, email: user.email, phone: user.phone }) || photo;
+
   const saveUserData = async () => {
     try {
       setDisabled(true);
@@ -59,6 +63,7 @@ export default function Profile() {
       }
       updateUser(_user.data);
       setDisabled(false);
+      setPhoto();
       updateSuccessMessage("Datos actualizados");
     } catch (error) {
       setDisabled(false);
@@ -70,8 +75,6 @@ export default function Profile() {
     e.preventDefault();
     saveUserData();
   };
-
-  console.log(photo);
 
   return (
     <div className={styles.container}>
@@ -136,14 +139,14 @@ export default function Profile() {
             <h3 className={styles.subtitle}>Teléfono</h3>
             <input
               className={styles.input}
-              pattern="3.\d{8}"
+              pattern="\d{10}"
               value={phone}
               onChange={e => setPhone(e.target.value)}
               required
               disabled={disabled}
             />
           </div>
-          <button className={styles.save_button} type="submit" disabled={disabled}>
+          <button className={styles.save_button} type="submit" disabled={disabled || !isEditing}>
             Guardar
           </button>
         </form>
