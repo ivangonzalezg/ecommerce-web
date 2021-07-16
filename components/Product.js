@@ -8,6 +8,7 @@ import API, { getErrorMessage, getPhotoUrl } from "../api";
 import { StateContext } from "../contexts/state";
 import { StatusContext } from "../contexts/status";
 import { CartContext } from "../contexts/cart";
+import { formatToCurrency, getProductSalePrice } from "../utils";
 
 export default function Product(props) {
   const { id, image, name, quantity, price, discount } = props;
@@ -55,12 +56,6 @@ export default function Product(props) {
     }
   };
 
-  let salePrice = price;
-
-  if (discount > 0) {
-    salePrice = price * (1 - discount / 100);
-  }
-
   return (
     <div className={styles.product}>
       <div className={styles.container}>
@@ -75,10 +70,10 @@ export default function Product(props) {
         </div>
         <div className={styles.body_container}>
           <h3 className={styles.name}>{name}</h3>
-          <span className={styles.pieces}> {quantity} pc(s)</span>
+          <span className={styles.pieces}> {quantity} ud(s)</span>
           <div className={styles.footer}>
-            {discount > 0 && <span className={styles.price_discount}>${price}</span>}
-            <span className={styles.price}>${salePrice}</span>
+            {discount > 0 && <span className={styles.price_discount}>{formatToCurrency(price)}</span>}
+            <span className={styles.price}>{formatToCurrency(getProductSalePrice(props))}</span>
             {productInCart.quantity ? (
               <div
                 className={classNames(styles.cart_button_cart, {

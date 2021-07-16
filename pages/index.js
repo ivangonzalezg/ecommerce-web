@@ -7,6 +7,7 @@ import API, { getErrorMessage } from "../api";
 import { StatusContext } from "../contexts/status";
 import Category from "../components/Category";
 import Product from "../components/Product";
+import Cart from "../components/Cart";
 
 export default function Home(props) {
   const { categories } = props;
@@ -100,6 +101,7 @@ export default function Home(props) {
           </div>
         </div>
       </main>
+      <Cart />
     </div>
   );
 }
