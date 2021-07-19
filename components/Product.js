@@ -14,9 +14,9 @@ export default function Product(props) {
   const { id, image, name, quantity, price, discount } = props;
   const { jwt, isLoggedIn } = useContext(StateContext);
   const { updateErrorMessage, updateSuccessMessage, updateIsAuth, updateWarningMessage } = useContext(StatusContext);
-  const { products, updateProducts, isAdding, updateIsAdding } = useContext(CartContext);
+  const { items, updateItems, isAdding, updateIsAdding } = useContext(CartContext);
 
-  const productInCart = products.find(item => item.product.id === id) || { quantity: 0 };
+  const productInCart = items.find(item => item.product.id === id) || { quantity: 0 };
 
   const addToCart = async () => {
     try {
@@ -32,7 +32,7 @@ export default function Product(props) {
       const response = await API(jwt).post("/carts/add", {
         product: id
       });
-      updateProducts(response.data);
+      updateItems(response.data);
       updateSuccessMessage("Producto añadido");
       updateIsAdding(false);
     } catch (error) {
@@ -47,7 +47,7 @@ export default function Product(props) {
       const response = await API(jwt).post("carts/remove", {
         product: id
       });
-      updateProducts(response.data);
+      updateItems(response.data);
       updateSuccessMessage("Producto removido");
       updateIsAdding(false);
     } catch (error) {

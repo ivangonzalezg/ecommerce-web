@@ -11,7 +11,7 @@ const constants = {
   LOGIN: "login",
   REGISTER: "register",
   FORGOT_PASSWORD: "forgot_password",
-  CART_PRODUCTS: "cart_products",
+  CART_ITEMS: "cart_items",
   IS_CART_MODAL: "is_cart_modal",
   IS_ADDING: "is_adding"
 };

@@ -5,7 +5,7 @@ const formatToCurrency = number => {
   });
 };
 
-const getProductSalePrice = (product = {}) => {
+const getProductSalePrice = (product = { price: 0, discount: 0 }) => {
   let salePrice = product.price;
 
   if (product.discount > 0) {

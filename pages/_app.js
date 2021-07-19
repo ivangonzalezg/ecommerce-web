@@ -14,7 +14,7 @@ import {
   INFO_MESSAGE,
   WARNING_MESSAGE,
   IS_AUTH,
-  CART_PRODUCTS,
+  CART_ITEMS,
   IS_CART_MODAL,
   IS_ADDING
 } from "../constants";
@@ -39,7 +39,7 @@ function Root({ Component, pageProps, ...props }) {
 
   const { isLoggedIn, jwt, updateUser, updateJwt, updateIsLoggedIn } = useContext(StateContext);
   const { isLoading, isAuth, updateIsLoading, updateErrorMessage, updateIsAuth } = useContext(StatusContext);
-  const { updateProducts } = useContext(CartContext);
+  const { updateItems } = useContext(CartContext);
   const [isSticky, setIsSticky] = useState(false);
   const router = useRouter();
 
@@ -99,7 +99,7 @@ function Root({ Component, pageProps, ...props }) {
   const getUserCart = async () => {
     try {
       const response = await API(jwt).get("carts/me");
-      updateProducts(response.data);
+      updateItems(response.data);
     } catch (error) {
       updateErrorMessage(getErrorMessage(error));
     }
@@ -109,7 +109,7 @@ function Root({ Component, pageProps, ...props }) {
     if (jwt) {
       getUserCart();
     } else {
-      updateProducts([]);
+      updateItems([]);
     }
   }, [jwt]);
 
@@ -154,7 +154,7 @@ export default function App(props) {
 
   const cartContext = useMemo(
     () => ({
-      updateProducts: products => dispatchCart({ type: CART_PRODUCTS, products }),
+      updateItems: items => dispatchCart({ type: CART_ITEMS, items }),
       updateIsCartModal: isCartModal => dispatchCart({ type: IS_CART_MODAL, isCartModal }),
       updateIsAdding: isAdding => dispatchCart({ type: IS_ADDING, isAdding }),
       ...cart
