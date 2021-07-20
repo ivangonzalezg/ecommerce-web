@@ -15,7 +15,7 @@ import {
   WARNING_MESSAGE,
   IS_AUTH,
   CART_ITEMS,
-  IS_CART_MODAL,
+  IS_CART_SIDEBAR,
   IS_ADDING
 } from "../constants";
 import { initialState, StateContext, stateReducer } from "../contexts/state";
@@ -155,7 +155,7 @@ export default function App(props) {
   const cartContext = useMemo(
     () => ({
       updateItems: items => dispatchCart({ type: CART_ITEMS, items }),
-      updateIsCartModal: isCartModal => dispatchCart({ type: IS_CART_MODAL, isCartModal }),
+      updateIsCartSidebar: isCartSidebar => dispatchCart({ type: IS_CART_SIDEBAR, isCartSidebar }),
       updateIsAdding: isAdding => dispatchCart({ type: IS_ADDING, isAdding }),
       ...cart
     }),
@@ -183,7 +183,7 @@ export default function App(props) {
             <meta property="og:description" content="Your jewelry introduces you before you even speak" />
             <meta property="og:country-name" content="MEX" />
           </Head>
-          <ToastProvider autoDismiss>
+          <ToastProvider autoDismiss placement="top-center">
             <Root {...props} />
           </ToastProvider>
         </CartContext.Provider>

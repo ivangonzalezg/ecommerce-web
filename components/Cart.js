@@ -1,15 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { LocalMall, Close } from "@material-ui/icons";
 import classNames from "classnames";
+import Image from "next/image";
 import styles from "../styles/components/cart.module.css";
 import { CartContext } from "../contexts/cart";
 import { StateContext } from "../contexts/state";
 import { formatToCurrency, getProductSalePrice } from "../utils";
+import CartItem from "./CartItem";
 
 export default function Cart() {
-  const { items } = useContext(CartContext);
+  const { items, isCartSidebar, updateIsCartSidebar, isAdding } = useContext(CartContext);
   const { isLoggedIn } = useContext(StateContext);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   if (!isLoggedIn) {
     return null;
@@ -19,7 +20,7 @@ export default function Cart() {
 
   const numberOfItems = `${items.length} ${items.length === 1 ? "item" : "items"}`;
 
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const toggleSidebar = () => updateIsCartSidebar(!isCartSidebar);
 
   return (
     <>
@@ -33,7 +34,7 @@ export default function Cart() {
       </button>
       <div
         className={classNames(styles.sidebar, {
-          [styles.sidebar_open]: isSidebarOpen
+          [styles.sidebar_open]: isCartSidebar
         })}
       >
         <div className={styles.sidebar_header}>
@@ -45,9 +46,18 @@ export default function Cart() {
             <Close fontSize="inherit" />
           </button>
         </div>
-        <div className={styles.sidebar_body}></div>
+        <div className={styles.sidebar_body}>
+          {items.length > 0 ? (
+            items.map(item => <CartItem key={item.id} {...item} />)
+          ) : (
+            <div className={styles.cart_empty_container}>
+              <Image src="/images/cart_empty.svg" width={140} height={180} objectFit="contain" alt="cart empty" />
+              <span className={styles.cart_empty_text}>No se encontraron productos</span>
+            </div>
+          )}
+        </div>
         <div className={styles.sidebar_footer}>
-          <button className={styles.checkout_button}>
+          <button className={styles.checkout_button} disabled={isAdding || !total}>
             <span>Checkout</span>
             <div className={styles.checkout_button_total}>{formatToCurrency(total)}</div>
           </button>

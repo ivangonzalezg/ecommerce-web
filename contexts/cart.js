@@ -1,15 +1,16 @@
 /* eslint-disable no-unused-vars */
 import { createContext } from "react";
-import { CART_ITEMS, IS_ADDING, IS_CART_MODAL } from "../constants";
+import { CART_ITEMS, IS_ADDING, IS_CART_SIDEBAR } from "../constants";
 
 const initialCart = {
   items: [],
-  isCartModal: false
+  isCartSidebar: false
 };
 
 const cartTypes = {
   items: [
     {
+      id: "",
       quantity: 0,
       product: {
         discount: 0,
@@ -29,13 +30,13 @@ const cartTypes = {
       }
     }
   ],
-  isCartModal: false,
+  isCartSidebar: false,
   isAdding: false
 };
 
 const CartContext = createContext({
   updateItems: (items = []) => {},
-  updateIsCartModal: (isCartModal = false) => {},
+  updateIsCartSidebar: (isCartSidebar = false) => {},
   updateIsAdding: (isAdding = false) => {},
   ...cartTypes
 });
@@ -47,10 +48,10 @@ const cartReducer = (prevCart, action) => {
         ...prevCart,
         items: action.items
       };
-    case IS_CART_MODAL:
+    case IS_CART_SIDEBAR:
       return {
         ...prevCart,
-        isCartModal: action.isCartModal
+        isCartSidebar: action.isCartSidebar
       };
     case IS_ADDING:
       return {

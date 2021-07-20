@@ -12,7 +12,7 @@ const constants = {
   REGISTER: "register",
   FORGOT_PASSWORD: "forgot_password",
   CART_ITEMS: "cart_items",
-  IS_CART_MODAL: "is_cart_modal",
+  IS_CART_SIDEBAR: "is_cart_sidebar",
   IS_ADDING: "is_adding"
 };
 

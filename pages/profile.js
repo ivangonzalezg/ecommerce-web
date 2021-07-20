@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 import Router from "next/router";
 import { Edit } from "@material-ui/icons";
 import styles from "../styles/profile.module.css";
@@ -7,7 +8,8 @@ import { StatusContext } from "../contexts/status";
 import API, { getErrorMessage } from "../api";
 import Card from "../components/Card";
 
-export default function Profile() {
+export default function Profile(props) {
+  const { directions } = props;
   const { jwt, user, updateUser } = useContext(StateContext);
   const { isLoading, updateErrorMessage, updateSuccessMessage } = useContext(StatusContext);
   const fileInput = useRef(null);
@@ -154,3 +156,30 @@ export default function Profile() {
     </div>
   );
 }
+
+export const getServerSideProps = async context => {
+  const jwt = context.req?.cookies?.jwt;
+  if (!jwt) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false
+      }
+    };
+  }
+  try {
+    const directions = await API(jwt, true).get(`/directions/me`);
+    return {
+      props: { directions: directions.data }
+    };
+  } catch (error) {
+    console.log(getErrorMessage(error));
+    return {
+      notFound: true
+    };
+  }
+};
+
+Profile.propTypes = {
+  directions: PropTypes.array.isRequired
+};
