@@ -77,7 +77,8 @@
 
 .sidebar_body {
   flex: 1;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .cart_empty_container {
