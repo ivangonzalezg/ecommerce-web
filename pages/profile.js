@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
 import Router from "next/router";
-import { Edit } from "@material-ui/icons";
+import { Edit, Delete } from "@material-ui/icons";
+import classNames from "classnames";
 import styles from "../styles/profile.module.css";
 import { StateContext } from "../contexts/state";
 import { StatusContext } from "../contexts/status";
 import API, { getErrorMessage } from "../api";
 import Card from "../components/Card";
 
-export default function Profile(props) {
-  const { directions } = props;
+export default function Profile() {
   const { jwt, user, updateUser } = useContext(StateContext);
   const { isLoading, updateErrorMessage, updateSuccessMessage } = useContext(StatusContext);
   const fileInput = useRef(null);
@@ -19,15 +18,26 @@ export default function Profile(props) {
   const [email, setEmail] = useState("");
   const [photo, setPhoto] = useState();
   const [disabled, setDisabled] = useState(false);
+  const [directions, setDirections] = useState([]);
+
+  const getDirections = async () => {
+    try {
+      const response = await API(jwt, true).get(`/directions/me`);
+      setDirections(response.data);
+    } catch (error) {
+      updateErrorMessage(getErrorMessage(error));
+    }
+  };
 
   useEffect(() => {
-    if (user.id) {
+    if (user.id && jwt) {
       setFirstName(user.firstName);
       setLastName(user.lastName);
       setPhone(user.phone);
       setEmail(user.email);
+      getDirections();
     }
-  }, [user]);
+  }, [user, jwt]);
 
   useEffect(() => {
     if (!jwt && !isLoading) {
@@ -76,6 +86,31 @@ export default function Profile(props) {
   const onSave = e => {
     e.preventDefault();
     saveUserData();
+  };
+
+  const setDefaultDirection = async id => {
+    try {
+      const response = await API(jwt).put(`/directions/${id}/default`);
+      setDirections(response.data);
+    } catch (error) {
+      updateErrorMessage(getErrorMessage(error));
+    }
+  };
+
+  const addDirection = () => {
+    // TODO:Crear modal con los siguientes campos: nombre (firstName), apellido (lastName), teléfono (phone), dirección (address), ciudad (city) y un botón de guardar (save)
+    console.log("add direction");
+  };
+
+  const editDirection = direction => {
+    // TODO:  Abrir modal (puedes usar el mismo de añadir direction) con los datos de la dirección (direction): nombre (firstName), apellido (lastName), teléfono (phone), dirección (address) y ciudad (city)
+    console.log("edit", direction);
+  };
+
+  const deleteDirection = direction => {
+    // TODO: Validar que la dirección no es la dirección por defecto, si sí lo es mostrar modal informando que no puede borrarla
+    console.log("delete", direction);
+    // TOOD: Si no es la dirección por defecto mostrar modal para confirmar, si el usuario confirma borrar la dirección de la base de datos
   };
 
   return (
@@ -148,6 +183,57 @@ export default function Profile(props) {
               disabled={disabled}
             />
           </div>
+          <h3>Direcciones de entrega</h3>
+          <div className={styles.directions_wrapper}>
+            {directions.map(direction => (
+              <div
+                key={direction.id}
+                className={classNames(styles.direction, {
+                  [styles.direction_default]: direction.default
+                })}
+              >
+                <div type="button" className={styles.direction_button} onClick={() => setDefaultDirection(direction.id)}>
+                  <div className={styles.direction_button_header}>
+                    <span className={styles.direction_name}>
+                      {direction.firstName} {direction.lastName}
+                    </span>
+                    <div className={styles.direction_button_actions}>
+                      <button
+                        type="button"
+                        className={styles.direction_button_action_edit}
+                        onClick={e => {
+                          e.stopPropagation();
+                          editDirection(direction);
+                        }}
+                      >
+                        <Edit fontSize="inherit" />
+                      </button>
+                      <button
+                        type="button"
+                        className={styles.direction_button_action_delete}
+                        onClick={e => {
+                          e.stopPropagation();
+                          deleteDirection(direction);
+                        }}
+                      >
+                        <Delete fontSize="inherit" />
+                      </button>
+                    </div>
+                  </div>
+                  <span className={styles.direction_address}>{direction.address}</span>
+                </div>
+              </div>
+            ))}
+            <div className={styles.direction}>
+              <button
+                type="button"
+                className={classNames(styles.direction_button, styles.add_direction_button)}
+                onClick={addDirection}
+              >
+                Añadir dirección
+              </button>
+            </div>
+          </div>
           <button className={styles.save_button} type="submit" disabled={disabled || !isEditing}>
             Guardar
           </button>
@@ -167,19 +253,8 @@ export const getServerSideProps = async context => {
       }
     };
   }
-  try {
-    const directions = await API(jwt, true).get(`/directions/me`);
-    return {
-      props: { directions: directions.data }
-    };
-  } catch (error) {
-    console.log(getErrorMessage(error));
-    return {
-      notFound: true
-    };
-  }
-};
 
-Profile.propTypes = {
-  directions: PropTypes.array.isRequired
+  return {
+    props: {}
+  };
 };

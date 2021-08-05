@@ -85,8 +85,108 @@
   border-color: rgb(0, 158, 127);
 }
 
+.directions_wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.direction {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px dashed rgb(241, 241, 241);
+}
+
+.direction:nth-child(3n-1) {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.direction:last-child:hover {
+  border: 1px dashed rgb(0, 158, 127);
+}
+
+.direction_default {
+  border: 1px solid rgb(0, 158, 127);
+}
+
+.direction_button {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  flex: 1;
+  text-align: left;
+  cursor: pointer;
+}
+
+.add_direction_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(0, 158, 127);
+}
+
+.direction_button_header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 5px;
+  min-height: 20px;
+}
+
+.direction_name {
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.direction_button_actions {
+  display: none;
+  flex-direction: row;
+  color: white;
+}
+
+.direction_button:hover .direction_button_actions {
+  display: flex;
+}
+
+.direction_button_action_edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  background-color: rgb(0, 158, 127);
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.direction_button_action_delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  background-color: rgb(255, 91, 96);
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-left: 5px;
+}
+
+.direction_address {
+  font-size: 15px;
+  color: rgb(66, 69, 97);
+}
+
 .save_button {
-  margin: 40px 0 0 0;
+  margin: 30px 0 0 0;
   padding: 0px 30px;
   font-size: 15px;
   font-weight: 700;
@@ -106,8 +206,17 @@
   background-color: rgb(1, 147, 118);
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
   .card {
     padding: 40px 20px 20px 20px !important;
+  }
+
+  .direction {
+    width: 100%;
+  }
+
+  .direction:nth-child(3n-1) {
+    margin-left: 0;
+    margin-right: 0;
   }
 }
